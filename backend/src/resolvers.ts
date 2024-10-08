@@ -81,6 +81,7 @@ const resolvers = {
             { extensions: { code: "QUIZ_API_FAILURE" } }
           );
         }
+        console.log("quizData: ", JSON.stringify(quizData, null, 2));
 
         // Convert the API response to match the return schema
         const questions = quizData.results.map((question: QuizQuestion) => ({
@@ -97,11 +98,13 @@ const resolvers = {
           type: question.type,
         }));
 
+        console.log("questions: ", JSON.stringify(questions, null, 2));
+
         return questions;
       } catch (error) {
         console.error(error);
         throw new GraphQLError(`Failed to generate quiz: ${error}`, {
-          extensions: { code: "QUIZ_API_ERRO" },
+          extensions: { code: "QUIZ_API_ERROR" },
         });
       }
     },

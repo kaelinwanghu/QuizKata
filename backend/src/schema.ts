@@ -41,13 +41,13 @@ const typeDefs = gql`
 
   input QuizInput {
     amount: Int!
-    category: Int
+    category: String
     difficulty: String
     type: String
   }
 
   type QuizResponse {
-    questions: [Question!]!
+    questions: [Question]!
   }
 
   type Query {
