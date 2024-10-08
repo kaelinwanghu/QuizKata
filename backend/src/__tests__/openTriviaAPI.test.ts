@@ -40,18 +40,20 @@ describe("generateQuiz resolver", () => {
 
     const result = await resolvers.Query.generateQuiz(null, args);
 
-    expect(result).toEqual([
-      {
-        text: "What is the capital of France?",
-        answers: [
-          { text: "Paris", isCorrect: true },
-          { text: "London", isCorrect: false },
-          { text: "Berlin", isCorrect: false },
-          { text: "Rome", isCorrect: false },
-        ],
-        type: "multiple",
-      },
-    ]);
+    expect(result).toEqual({
+      questions: [
+        {
+          text: "What is the capital of France?",
+          answers: [
+            { text: "Paris", isCorrect: true },
+            { text: "London", isCorrect: false },
+            { text: "Berlin", isCorrect: false },
+            { text: "Rome", isCorrect: false },
+          ],
+          type: "multiple",
+        },
+      ],
+    });
 
     expect(fetchQuizQuestions).toHaveBeenCalledWith(args.input);
   });

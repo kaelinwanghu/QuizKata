@@ -4,7 +4,7 @@ const typeDefs = gql`
   type User {
     id: ID!
     username: String!
-    scores: [Score!]!
+    scores: [Score!]
   }
 
   type Question {
@@ -21,9 +21,17 @@ const typeDefs = gql`
   type Score {
     id: ID!
     score: Int!
-    value: Float!
     time: Float!
     username: String!
+    amount: Int!
+    category: String!
+    difficulty: String!
+    type: String!
+  }
+
+  type ScoreResponse {
+    success: Boolean!
+    message: String!
   }
 
   input LeaderboardQuery {
@@ -53,7 +61,7 @@ const typeDefs = gql`
     generateQuiz(input: QuizInput!): QuizResponse!
   }
 
-  type QuizMetadata {
+  input QuizMetadata {
     amount: Int!
     category: String!
     difficulty: String!
@@ -67,7 +75,7 @@ const typeDefs = gql`
       quizData: QuizMetadata!
       score: Int!
       time: Float!
-    ): Score!
+    ): ScoreResponse!
   }
 `;
 

@@ -21,9 +21,13 @@ const resolvers = {
         const users = await prisma.user.findMany();
         return users;
       } catch (error) {
-        throw new GraphQLError(`Failed to get users: ${error}`, {
-          extensions: { code: "GET_USERS_FAILED" },
-        });
+        if (error instanceof GraphQLError) {
+          throw error;
+        } else {
+          throw new GraphQLError(`Failed to get users: ${error}`, {
+            extensions: { code: "GET_USERS_FAILED" },
+          });
+        }
       }
     },
 
@@ -46,9 +50,13 @@ const resolvers = {
 
         return user;
       } catch (error) {
-        throw new GraphQLError(`Failed to fetch user: ${error}`, {
-          extensions: { code: "GET_USER_FAILED" },
-        });
+        if (error instanceof GraphQLError) {
+          throw error;
+        } else {
+          throw new GraphQLError(`Failed to fetch user: ${error}`, {
+            extensions: { code: "GET_USER_FAILED" },
+          });
+        }
       }
     },
 
@@ -102,9 +110,62 @@ const resolvers = {
 
         return { questions };
       } catch (error) {
-        console.error(error);
-        throw new GraphQLError(`Failed to generate quiz: ${error}`, {
-          extensions: { code: "QUIZ_API_ERROR" },
+        if (error instanceof GraphQLError) {
+          throw error;
+        } else {
+          console.error(error);
+          throw new GraphQLError(`Failed to generate quiz: ${error}`, {
+            extensions: { code: "QUIZ_API_ERROR" },
+          });
+        }
+      }
+    },
+
+    /**
+     * Gets a leaderboard of all quizzes above a certain criteria
+     *
+     * @param _parent required for GraphQL resolvers but unused
+     * @param args contains the quiz data to be submitted
+     * @returns the fully created quiz object, or null if no quizzes
+     */
+    leaderboard: async (_parent: any, args: { input: any }) => {
+      const {
+        username,
+        score,
+        amount: questionAmount,
+        category,
+        difficulty,
+        type,
+      } = args.input;
+      try {
+        const scores = await prisma.score.findMany({
+          where: {
+            ...(questionAmount && { amount: questionAmount }),
+            ...(username && { user: { username } }),
+            ...(score && { score: { gte: score } }),
+            ...(category && { category }),
+            ...(difficulty && { difficulty }),
+            ...(type && { type }),
+          },
+          orderBy: [{ score: "desc" }, { time: "asc" }], // First order by score, then by time
+          include: {
+            user: true, // To include username in the response
+          },
+        });
+
+        return scores.map((score) => ({
+          id: score.id,
+          score: score.score,
+          time: score.time,
+          username: score.user.username,
+          amount: score.amount,
+          category: score.category,
+          difficulty: score.difficulty,
+          type: score.type,
+        }));
+      } catch (error) {
+        throw new GraphQLError(`Error getting leaderboard: ${error}`, {
+          extensions: { code: "LEADERBOARD_QUERY_ERROR" },
         });
       }
     },
@@ -144,9 +205,86 @@ const resolvers = {
 
         return user;
       } catch (error) {
-        throw new GraphQLError(`User creation error: ${error}.`, {
-          extensions: { code: "USER_CREATION_ERROR" },
+        // Let error propagate to be more accurate if it is an internal GraphQL error
+        if (error instanceof GraphQLError) {
+          throw error;
+        } else {
+          throw new GraphQLError(`User creation error: ${error}.`, {
+            extensions: { code: "USER_CREATION_ERROR" },
+          });
+        }
+      }
+    },
+
+    /**
+     * Submits a score for a user along with quiz metadata.
+     *
+     * @param _parent required for GraphQL resolvers but unused
+     * @param args contains username, score, time, and quiz metadata
+     * @returns the newly created score object
+     */
+    submitScore: async (
+      _parent: any,
+      args: {
+        // Pretty clunky but there aren't good ways to get GraphQL input types
+        username: string;
+        quizData: {
+          category: string;
+          difficulty: string;
+          type: string;
+          amount: number;
+        };
+        score: number;
+        time: number;
+      }
+    ) => {
+      const { username, quizData, score, time } = args;
+
+      try {
+        const user = await prisma.user.findUnique({
+          where: { username },
         });
+
+        if (!user) {
+          throw new GraphQLError(
+            `User with username "${username}" not found.`,
+            { extensions: { code: "USER_NOT_FOUND" } }
+          );
+        }
+
+        const newScore = await prisma.score.create({
+          data: {
+            score,
+            time: time,
+            amount: quizData.amount,
+            category: quizData.category,
+            difficulty: quizData.difficulty,
+            type: quizData.type,
+            user: {
+              connect: { id: user.id }, // Has to be connected with userId to be updated correctly
+            },
+          },
+        });
+
+        if (!newScore) {
+          throw new GraphQLError(`Failed to submit the score.`, {
+            extensions: { code: "SCORE_SUBMISSION_FAILED" },
+          });
+        }
+
+        // Can replace with ID response later if necessary
+        return {
+          success: true,
+          message: "Score submitted successfully",
+        };
+      } catch (error) {
+        if (error instanceof GraphQLError) {
+          throw error;
+        } else {
+          throw new GraphQLError(`Error submitting scores: ${error}`, {
+            extensions: { code: "SUBMIT_SCORE_ERROR" },
+          });
+        }
       }
     },
   },
