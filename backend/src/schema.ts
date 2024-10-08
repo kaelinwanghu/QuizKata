@@ -16,7 +16,7 @@ const typeDefs = gql`
 
   type Question {
     text: String!
-    answers: [Answer]
+    answers: [Answer!]
     type: String!
   }
 
@@ -45,7 +45,7 @@ const typeDefs = gql`
   }
 
   type QuizResponse {
-    questions: [Question]
+    questions: [Question!]
   }
 
   type Query {
