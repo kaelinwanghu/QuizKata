@@ -100,7 +100,7 @@ const resolvers = {
 
         console.log("questions: ", JSON.stringify(questions, null, 2));
 
-        return questions;
+        return { questions };
       } catch (error) {
         console.error(error);
         throw new GraphQLError(`Failed to generate quiz: ${error}`, {

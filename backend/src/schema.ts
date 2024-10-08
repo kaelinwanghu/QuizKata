@@ -15,14 +15,12 @@ const typeDefs = gql`
   }
 
   type Question {
-    id: ID!
     text: String!
-    answers: [Answer!]!
+    answers: [Answer]
     type: String!
   }
 
   type Answer {
-    id: ID!
     text: String!
     isCorrect: Boolean!
   }
@@ -47,7 +45,7 @@ const typeDefs = gql`
   }
 
   type QuizResponse {
-    questions: [Question]!
+    questions: [Question]
   }
 
   type Query {
