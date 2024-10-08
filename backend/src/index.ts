@@ -1,11 +1,9 @@
 import "dotenv/config";
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
-import { PrismaClient } from "@prisma/client";
 import typeDefs from "./schema";
 import resolvers from "./resolvers";
-
-const prisma = new PrismaClient();
+import prisma from "./prisma";
 
 const server = new ApolloServer({
   typeDefs,
