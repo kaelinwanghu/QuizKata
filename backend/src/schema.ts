@@ -7,13 +7,6 @@ const typeDefs = gql`
     scores: [Score!]!
   }
 
-  type Quiz {
-    id: ID!
-    title: String!
-    questions: [Question!]!
-    scores: [Score!]!
-  }
-
   type Question {
     text: String!
     answers: [Answer!]
@@ -27,14 +20,19 @@ const typeDefs = gql`
 
   type Score {
     id: ID!
-    value: Int!
-    user: User!
-    quiz: Quiz!
+    score: Int!
+    value: Float!
+    time: Float!
+    username: String!
   }
 
-  type LeaderboardEntry {
-    user: User!
-    score: Int!
+  input LeaderboardQuery {
+    username: String
+    score: Int
+    amount: Int
+    category: String
+    difficulty: String
+    type: String
   }
 
   input QuizInput {
@@ -50,16 +48,26 @@ const typeDefs = gql`
 
   type Query {
     users: [User!]!
-    user(id: ID!): User
-    quizzes: [Quiz!]!
-    quiz(id: ID!): Quiz
-    leaderboard: [LeaderboardEntry!]!
+    user(username: String!): User
+    leaderboard(input: LeaderboardQuery!): [Score!]
     generateQuiz(input: QuizInput!): QuizResponse!
+  }
+
+  type QuizMetadata {
+    amount: Int!
+    category: String!
+    difficulty: String!
+    type: String!
   }
 
   type Mutation {
     createUser(username: String!): User!
-    submitScore(userId: ID!, quizId: ID!, value: Int!): Score!
+    submitScore(
+      username: String!
+      quizData: QuizMetadata!
+      score: Int!
+      time: Float!
+    ): Score!
   }
 `;
 
