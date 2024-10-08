@@ -1,4 +1,3 @@
-// src/schema.ts
 import { gql } from "graphql-tag";
 
 const typeDefs = gql`
@@ -10,7 +9,6 @@ const typeDefs = gql`
 
   type Quiz {
     id: ID!
-    apiId: Int!
     title: String!
     questions: [Question!]!
     scores: [Score!]!
@@ -20,6 +18,7 @@ const typeDefs = gql`
     id: ID!
     text: String!
     answers: [Answer!]!
+    type: String!
   }
 
   type Answer {
@@ -40,12 +39,24 @@ const typeDefs = gql`
     score: Int!
   }
 
+  input QuizInput {
+    amount: Int!
+    category: Int
+    difficulty: String
+    type: String
+  }
+
+  type QuizResponse {
+    questions: [Question!]!
+  }
+
   type Query {
     users: [User!]!
     user(id: ID!): User
     quizzes: [Quiz!]!
     quiz(id: ID!): Quiz
     leaderboard: [LeaderboardEntry!]!
+    generateQuiz(input: QuizInput!): QuizResponse!
   }
 
   type Mutation {
