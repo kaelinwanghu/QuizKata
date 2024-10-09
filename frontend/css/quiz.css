@@ -33,3 +33,17 @@ button:hover {
 #quiz-output {
   margin-top: 20px;
 }
+
+.question-container {
+  margin-bottom: 20px;
+}
+
+.correct {
+  color: green;
+  font-weight: bold;
+}
+
+.incorrect {
+  color: red;
+  font-weight: bold;
+}
