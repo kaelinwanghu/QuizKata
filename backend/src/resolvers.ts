@@ -132,6 +132,7 @@ const resolvers = {
       const {
         username,
         score,
+        time,
         amount: questionAmount,
         category,
         difficulty,
@@ -143,6 +144,7 @@ const resolvers = {
             ...(questionAmount && { amount: questionAmount }),
             ...(username && { user: { username } }),
             ...(score && { score: { gte: score } }),
+            ...(time && { time: { lte: time } }),
             ...(category && { category }),
             ...(difficulty && { difficulty }),
             ...(type && { type }),

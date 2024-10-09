@@ -10,7 +10,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 
 async function startServer() {
-  const app = express();
+  const app = express(); // Added express so frontend and backend can communicate
 
   app.use(
     cors({

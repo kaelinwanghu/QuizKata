@@ -37,6 +37,7 @@ const typeDefs = gql`
   input LeaderboardQuery {
     username: String
     score: Int
+    time: Float
     amount: Int
     category: String
     difficulty: String

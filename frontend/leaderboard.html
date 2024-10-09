@@ -4,16 +4,38 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Leaderboard</title>
-    <link rel="stylesheet" href="css/main.css" />
-    <link rel="stylesheet" href="css/leaderboard.css" />
+    <link rel="stylesheet" href="css/styles.css" />
   </head>
   <body>
     <div class="container">
       <h1>Leaderboard</h1>
-      <p>This is the leaderboard page.</p>
-      <a href="index.html">Go back to home</a>
-    </div>
+      <form id="leaderboard-form">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" />
 
+        <label for="score">Minimum Score:</label>
+        <input type="number" id="score" name="score" />
+
+        <label for="score">Maximum Time:</label>
+        <input type="number" id="time" name="time" />
+
+        <label for="amount">Number of Questions:</label>
+        <input type="number" id="amount" name="amount" />
+
+        <label for="category">Category:</label>
+        <input type="text" id="category" name="category" />
+
+        <label for="difficulty">Difficulty:</label>
+        <input type="text" id="difficulty" name="difficulty" />
+
+        <label for="type">Question Type:</label>
+        <input type="text" id="type" name="type" />
+
+        <button type="submit">Search Leaderboard</button>
+      </form>
+
+      <div id="leaderboard-output"></div>
+    </div>
     <script src="js/leaderboard.js"></script>
   </body>
 </html>
