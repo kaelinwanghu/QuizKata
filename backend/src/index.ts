@@ -14,7 +14,7 @@ async function startServer() {
 
   app.use(
     cors({
-      origin: "http://localhost:3000", // Allow frontend requests
+      origin: "http://localhost:4000", // Allow frontend requests
     })
   );
 
