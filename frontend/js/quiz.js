@@ -1,12 +1,3 @@
-// Adding event listeners to buttons
-document.getElementById("leaderboard-button").addEventListener("click", () => {
-  window.location.href = "leaderboard.html";
-});
-
-document.getElementById("quiz-button").addEventListener("click", () => {
-  window.location.href = "quiz.html";
-});
-
 document
   .getElementById("quiz-form")
   .addEventListener("submit", async function (event) {
@@ -42,7 +33,7 @@ document
     };
 
     try {
-      const response = await fetch("http://localhost:4000/", {
+      const response = await fetch("http://localhost:4000/graphql", {
         // Use your backend's URL here
         method: "POST",
         headers: {
@@ -65,7 +56,7 @@ document
 
 function displayQuiz(questions) {
   const outputDiv = document.getElementById("quiz-output");
-  outputDiv.innerHTML = ""; // Clear previous output
+  outputDiv.innerHTML = "";
 
   if (!questions || questions.length === 0) {
     outputDiv.innerHTML = "<p>No quiz data returned.</p>";

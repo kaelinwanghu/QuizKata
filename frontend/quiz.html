@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Take a Quiz</title>
+    <link rel="stylesheet" href="css/quiz.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Configure Your Quiz</h1>
+      <form id="quiz-form">
+        <label for="amount">Number of Questions:</label>
+        <input type="number" id="amount" name="amount" min="1" required />
+
+        <label for="category">Category:</label>
+        <input type="text" id="category" name="category" required />
+
+        <label for="difficulty">Difficulty:</label>
+        <select id="difficulty" name="difficulty" required>
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+
+        <label for="type">Question Type:</label>
+        <select id="type" name="type" required>
+          <option value="multiple">Multiple Choice</option>
+          <option value="boolean">True/False</option>
+        </select>
+
+        <button type="submit">Generate Quiz</button>
+      </form>
+
+      <div id="quiz-output"></div>
+      <a href="index.html">Go back to home</a>
+    </div>
+
+    <script src="js/quiz.js"></script>
+  </body>
+</html>
